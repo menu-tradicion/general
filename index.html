@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Braza Brava POS</title>
+    <!-- Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Estilos -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- Menú Lateral -->
+    <nav class="sidebar">
+        <div class="brand">BRAZA BRAVA</div>
+        <button class="nav-btn active" data-target="dashboard"><i class="fas fa-chart-line"></i> Dashboard</button>
+        <button class="nav-btn" data-target="pos"><i class="fas fa-cash-register"></i> Pedidos / POS</button>
+        <button class="nav-btn" data-target="caja"><i class="fas fa-wallet"></i> Caja</button>
+        <button class="nav-btn" data-target="inventory"><i class="fas fa-boxes"></i> Inventario</button>
+        <button class="nav-btn" data-target="gastos"><i class="fas fa-file-invoice-dollar"></i> Gastos</button>
+        <button class="nav-btn" data-target="menu-config"><i class="fas fa-utensils"></i> Menú</button>
+        <button class="nav-btn" data-target="reportes"><i class="fab fa-whatsapp"></i> Reportes</button>
+        <div style="margin-top: auto;">
+            <button class="nav-btn" onclick="DB.reset()" style="color: var(--danger)"><i class="fas fa-trash"></i> Reset Datos</button>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        <header>
+            <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+            <h2 id="page-title">Dashboard</h2>
+            <div style="width: 24px;"></div> <!-- Espaciador -->
+        </header>
+
+        <!-- SECCIÓN: DASHBOARD -->
+        <section id="dashboard" class="active">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>Ventas Hoy</h3>
+                    <div class="value green" id="dash-ventas">$0</div>
+                </div>
+                <div class="card">
+                    <h3>Pedidos Hoy</h3>
+                    <div class="value" id="dash-pedidos">0</div>
+                </div>
+                <div class="card">
+                    <h3>Efectivo</h3>
+                    <div class="value" id="dash-efectivo">$0</div>
+                </div>
+                <div class="card">
+                    <h3>Tarjeta/Transf</h3>
+                    <div class="value" id="dash-tarjeta">$0</div>
+                </div>
+            </div>
+            <div class="card" style="height: 400px;">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: POS -->
+        <section id="pos">
+            <div class="pos-container">
+                <div id="product-grid" class="product-grid">
+                    <!-- Productos inyectados por JS -->
+                </div>
+                <div class="cart-panel">
+                    <h3>Orden Actual</h3>
+                    <div id="cart-items" class="cart-items"></div>
+                    <div class="cart-total" id="cart-total">$0</div>
+                    <button class="btn-pay" onclick="openPaymentModal()">COBRAR</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: CAJA -->
+        <section id="caja">
+            <div class="dashboard-grid">
+                <div class="card"><h3>Total Ingresos</h3><div class="value green" id="caja-ingresos">$0</div></div>
+                <div class="card"><h3>Total Egresos</h3><div class="value red" id="caja-egresos">$0</div></div>
+                <div class="card"><h3>Caja Final Est.</h3><div class="value" id="caja-final">$0</div></div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: GASTOS -->
+        <section id="gastos">
+            <div class="card" style="margin-bottom: 20px;">
+                <h3>Registrar Nuevo Gasto</h3>
+                <input type="text" id="gasto-concepto" placeholder="Concepto (ej. Compra de Gas)">
+                <input type="number" id="gasto-monto" placeholder="Monto">
+                <button class="btn-primary" onclick="registrarGasto()">Guardar Gasto</button>
+            </div>
+            <div class="card">
+                <h3>Historial Reciente</h3>
+                <table>
+                    <thead><tr><th>Fecha</th><th>Concepto</th><th>Monto</th></tr></thead>
+                    <tbody id="gastos-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: INVENTARIO -->
+        <section id="inventory">
+            <div class="card">
+                <h3>Control de Insumos</h3>
+                <table>
+                    <thead><tr><th>Producto</th><th>Stock Actual</th><th>Estado</th><th>Acción</th></tr></thead>
+                    <tbody id="inventory-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: MENÚ CONFIG -->
+        <section id="menu-config">
+            <button class="btn-primary" onclick="addProduct()" style="margin-bottom: 15px;">+ Agregar Producto</button>
+            <div class="card">
+                <table>
+                    <thead><tr><th>Nombre</th><th>Precio</th><th>Cat</th><th>Acción</th></tr></thead>
+                    <tbody id="menu-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECCIÓN: REPORTES -->
+        <section id="reportes">
+            <div class="dashboard-grid">
+                <div class="card"><h3>Ventas Totales (Histórico)</h3><div class="value" id="rep-ventas">$0</div></div>
+                <div class="card"><h3>Gastos Totales</h3><div class="value red" id="rep-gastos">$0</div></div>
+                <div class="card"><h3>Ganancia Neta</h3><div class="value green" id="rep-ganancia">$0</div></div>
+            </div>
+            <div class="card" style="text-align: center; padding: 40px;">
+                <h3>Enviar Resumen a WhatsApp</h3>
+                <p style="color: #aaa; margin-bottom: 20px;">Genera un reporte automático del día para enviar a tu socio o contador.</p>
+                <button class="btn-pay" style="background-color: #25D366;" onclick="generateWhatsApp()">
+                    <i class="fab fa-whatsapp"></i> Generar y Enviar
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL DE PAGO -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 20px;">Seleccionar Método de Pago</h3>
+            <button class="btn-pay" style="margin-bottom: 10px; background: #2ecc71;" onclick="processPayment('efectivo')">Efectivo</button>
+            <button class="btn-pay" style="margin-bottom: 10px; background: #3498db;" onclick="processPayment('tarjeta')">Tarjeta / Datáfono</button>
+            <button class="btn-pay" style="margin-bottom: 10px; background: #9b59b6;" onclick="processPayment('transferencia')">Transferencia / Nequi</button>
+            <button class="btn-danger" style="width: 100%; margin-top: 10px;" onclick="closePaymentModal()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
