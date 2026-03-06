@@ -1,215 +1,77 @@
-/* style.css - Diseño Responsivo y Moderno */
+body{
 
-:root {
-    --primary: #ff6b6b; /* Rojo Braza */
-    --secondary: #4ecdc4;
-    --dark: #1a1a1a;
-    --dark-light: #2d2d2d;
-    --text: #f7f7f7;
-    --text-muted: #a0a0a0;
-    --success: #2ecc71;
-    --warning: #f1c40f;
-    --danger: #e74c3c;
-    --radius: 12px;
+font-family:Arial;
+background:#121212;
+color:white;
+margin:0;
+
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+header{
 
-body {
-    background-color: var(--dark);
-    color: var(--text);
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
+background:#ff6a00;
+padding:15px;
+text-align:center;
+
 }
 
-/* --- Sidebar / Menú Lateral --- */
-.sidebar {
-    width: 250px;
-    background-color: var(--dark-light);
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    border-right: 1px solid #333;
-    transition: transform 0.3s ease;
-    z-index: 100;
+nav{
+
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+padding:10px;
+
 }
 
-.brand {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--primary);
-    margin-bottom: 30px;
-    text-align: center;
-    letter-spacing: 1px;
+button{
+
+background:#ff6a00;
+border:none;
+color:white;
+padding:10px 15px;
+cursor:pointer;
+
 }
 
-.nav-btn {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    padding: 15px;
-    text-align: left;
-    cursor: pointer;
-    font-size: 1rem;
-    border-radius: var(--radius);
-    margin-bottom: 5px;
-    transition: 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+button:hover{
+
+background:#ff4500;
+
 }
 
-.nav-btn:hover, .nav-btn.active {
-    background-color: var(--primary);
-    color: white;
+section{
+
+padding:20px;
+
 }
 
-/* --- Contenido Principal --- */
-.main-content {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    position: relative;
+.hidden{
+
+display:none;
+
 }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+#listaMesas{
+
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:10px;
+
 }
 
-.menu-toggle { display: none; font-size: 1.5rem; background: none; border: none; color: white; cursor: pointer; }
+.mesa{
 
-section { display: none; animation: fadeIn 0.3s; }
-section.active { display: block; }
+background:#333;
+padding:20px;
+text-align:center;
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-/* --- Dashboard Cards --- */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
 }
 
-.card {
-    background-color: var(--dark-light);
-    padding: 20px;
-    border-radius: var(--radius);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-}
+input,select{
 
-.card h3 { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px; }
-.card .value { font-size: 1.8rem; font-weight: bold; }
-.card .value.green { color: var(--success); }
-.card .value.red { color: var(--danger); }
+padding:8px;
+margin:5px;
 
-/* --- POS System --- */
-.pos-container {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
-    height: calc(100vh - 100px);
-}
-
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 15px;
-    overflow-y: auto;
-    padding-right: 5px;
-}
-
-.product-card {
-    background-color: var(--dark-light);
-    padding: 15px;
-    border-radius: var(--radius);
-    text-align: center;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: 0.2s;
-}
-
-.product-card:active { transform: scale(0.95); }
-.product-card:hover { border-color: var(--primary); }
-
-.product-card .name { font-weight: bold; margin-bottom: 5px; display: block; }
-.product-card .price { color: var(--primary); font-size: 1.1rem; }
-
-.cart-panel {
-    background-color: var(--dark-light);
-    border-radius: var(--radius);
-    display: flex;
-    flex-direction: column;
-    padding: 15px;
-}
-
-.cart-items { flex: 1; overflow-y: auto; margin-bottom: 15px; }
-.cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px; }
-.cart-controls button { background: #444; border: none; color: white; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; }
-
-.cart-total { font-size: 1.5rem; text-align: right; margin-bottom: 15px; font-weight: bold; }
-
-.btn-pay {
-    background-color: var(--success);
-    color: white;
-    border: none;
-    padding: 15px;
-    width: 100%;
-    border-radius: var(--radius);
-    font-size: 1.2rem;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-/* --- Tablas y Formularios --- */
-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
-th { color: var(--text-muted); }
-input, select {
-    background-color: #333;
-    border: 1px solid #444;
-    color: white;
-    padding: 10px;
-    border-radius: 8px;
-    width: 100%;
-    margin-bottom: 10px;
-}
-button.btn-primary { background-color: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
-button.btn-danger { background-color: var(--danger); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-
-/* --- Inventario Status --- */
-.status-ok { color: var(--success); }
-.status-low { color: var(--warning); }
-.status-crit { color: var(--danger); }
-
-/* --- Modal --- */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-.modal-content {
-    background: var(--dark-light);
-    padding: 25px;
-    border-radius: var(--radius);
-    width: 90%;
-    max-width: 400px;
-}
-
-/* --- Responsive Mobile --- */
-@media (max-width: 768px) {
-    .sidebar { position: fixed; height: 100%; transform: translateX(-100%); }
-    .sidebar.open { transform: translateX(0); }
-    .menu-toggle { display: block; }
-    .pos-container { grid-template-columns: 1fr; height: auto; }
-    .cart-panel { margin-top: 20px; }
-    .dashboard-grid { grid-template-columns: 1fr 1fr; }
 }
